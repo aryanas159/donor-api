@@ -17,14 +17,14 @@ const DonorSchema = new Schema({
 	phoneNo: {
 		type: String,
 		required: [true, "Phone number is required"],
-        // unique: true,
+        unique: true,
 	},
 	email: {
 		type: String,
 		required: true,
 		max: 50,
 		min: 2,
-		// unique: true,
+		unique: true,
 	},
     password: {
         type: String,
@@ -32,7 +32,7 @@ const DonorSchema = new Schema({
     },
     bloodGroup: {
         type: String,
-        enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+        enum: ['A', 'A-', 'B', 'B-', 'AB', 'AB-', 'O', 'O-'],
         required: true
     },
     gender: {
