@@ -50,7 +50,7 @@ const DonorSchema = new Schema({
     },
     isDonating: {
         type: Boolean,
-        default: false
+        default: true
     }
 },
     {timestamps: true}
