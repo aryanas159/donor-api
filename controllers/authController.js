@@ -57,10 +57,12 @@ const getClosestDonors = async (req, res) => {
 	}
 	const compareFunction = (a, b) => {
 		return a.distance - b.distance;
-	}
+	};
 
 	if (donors.length) {
-		const listOfDonors = donors.filter(donor => donor.bloodGroup == bloodType).map((donor) => {
+		const listOfDonors = donors
+			.filter((donor) => donor.bloodGroup == bloodType)
+			.map((donor) => {
 				const distance = getDistanceFromLatLonInKm(
 					Number(lat),
 					Number(long),
@@ -68,12 +70,20 @@ const getClosestDonors = async (req, res) => {
 					donor.location.longitude
 				);
 				return { ...donor.toObject(), distance };
-		});
-		const sortedListOfDonors = listOfDonors.sort(compareFunction)
+			});
+		const sortedListOfDonors = listOfDonors.sort(compareFunction);
 		return res.status(StatusCodes.OK).json({ sortedListOfDonors });
 	}
 	return res
 		.status(StatusCodes.BAD_REQUEST)
 		.json({ message: "No donors available" });
 };
-module.exports = { registerDonor, loginDonor, changeStatus, getClosestDonors };
+const getDonor = async (req, res) => {
+	const { id } = req.params;
+	const donor = await Donor.findById(id).select('-password')
+	if (['A', 'B', 'AB', 'O'].includes(donor?.bloodGroup)) {
+		donor.bloodGroup += '+'
+	}
+	res.status(StatusCodes.OK).json({donor})
+};
+module.exports = { registerDonor, loginDonor, changeStatus, getClosestDonors, getDonor };
