@@ -5,7 +5,7 @@ const app = express();
 const connectDB = require("./db/connectDB");
 const errorHandler = require("./middleware/errorHandler");
 const PORT = process.env.PORT || 3000;
-const cors = require('cors')
+const cors = require("cors");
 
 app.use(express.json());
 app.use(
@@ -15,8 +15,10 @@ app.use(
 );
 
 const authRoute = require("./routes/authRoute");
+const otpRoute = require("./routes/otpRoute");
 app.use("/donor", authRoute);
-app.use(errorHandler)
+app.use("/otp", otpRoute);
+app.use(errorHandler);
 const start = async () => {
 	try {
 		await connectDB(process.env.DB_URL);

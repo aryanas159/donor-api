@@ -80,10 +80,31 @@ const getClosestDonors = async (req, res) => {
 };
 const getDonor = async (req, res) => {
 	const { id } = req.params;
-	const donor = await Donor.findById(id).select('-password')
-	if (['A', 'B', 'AB', 'O'].includes(donor?.bloodGroup)) {
-		donor.bloodGroup += '+'
+	const donor = await Donor.findById(id).select("-password");
+	if (["A", "B", "AB", "O"].includes(donor?.bloodGroup)) {
+		donor.bloodGroup += "+";
 	}
-	res.status(StatusCodes.OK).json({donor})
+	res.status(StatusCodes.OK).json({ donor });
 };
-module.exports = { registerDonor, loginDonor, changeStatus, getClosestDonors, getDonor };
+const changePassword = async (req, res) => {
+	const { email, newPassword } = req.body;
+	if (!email || !newPassword) {
+		throw new Error("Provide necessary information");
+	}
+	const salt = await bcrypt.genSalt(10);
+	const hashedNewPassword = await bcrypt.hash(newPassword, salt);
+	const donor = await Donor.findOneAndUpdate(
+		{ email },
+		{ password: hashedNewPassword },
+		{new: true}
+	);
+	res.status(StatusCodes.OK).json({ donor });
+};
+module.exports = {
+	registerDonor,
+	loginDonor,
+	changeStatus,
+	getClosestDonors,
+	getDonor,
+	changePassword,
+};
