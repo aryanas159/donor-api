@@ -1,6 +1,4 @@
 const nodemailer = require("nodemailer");
-var unirest = require("unirest");
-const fast2sms = require("fast-two-sms");
 const bcrypt = require("bcryptjs");
 const { StatusCodes } = require("http-status-codes");
 
